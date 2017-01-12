@@ -1,5 +1,9 @@
 package im.hua.jnidemo;
 
+import android.content.Context;
+import android.content.pm.PackageInfo;
+import android.content.pm.PackageManager;
+import android.content.pm.Signature;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.support.design.widget.FloatingActionButton;
@@ -65,4 +69,21 @@ public class MainActivity extends AppCompatActivity {
      * which is packaged with this application.
      */
     public native String stringFromJNI();
+
+    public String getSignature(Context context)
+    {
+        try {
+            /** 通过包管理器获得指定包名包含签名的包信息 **/
+            PackageInfo packageInfo = getPackageManager().getPackageInfo(context.getPackageName(), PackageManager.GET_SIGNATURES);
+            /******* 通过返回的包信息获得签名数组 *******/
+            Signature[] signatures = packageInfo.signatures;
+            /******* 循环遍历签名数组拼接应用签名 *******/
+            return signatures[0].toCharsString();
+            /************** 得到应用签名 **************/
+        } catch (PackageManager.NameNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        return null;
+    }
 }
